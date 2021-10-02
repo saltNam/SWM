@@ -458,7 +458,7 @@ geocoder.addressSearch('${s.studycafe_address}' , function(result, status) {
 		    <label for="studycafe_roomno">Room</label>
 		    
 		       <select id="studycafe_room" name="studycafe_room" size="1" >
-		          <option value="main">방을 선택해주세요 ~.~ </option>
+		          <option value="main">방을 선택해주세요 </option>
 		          <c:forEach items="${files}" var="room">	
 			          <option value="${room.stored_file_name}#${room.room_name}">${room.room_name}</option>
 		          </c:forEach>

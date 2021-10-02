@@ -32,7 +32,7 @@ public class FileController {
 		String originalFileName	=file.getOriginal_file_name();
 		
 		
-		byte fileByte[]=FileUtils.readFileToByteArray(new File("C:\\java\\sdsApp\\SWM2\\src\\main\\webapp\\resources\\files\\meeting"+storedFileName));
+		byte fileByte[]=FileUtils.readFileToByteArray(new File("C:\\java\\sdsApp\\SWM2\\src\\main\\webapp\\resources\\files\\meeting\\"+storedFileName));
 		
 		response.setContentType("application/octet-stream");
 		response.setContentLength(fileByte.length);
