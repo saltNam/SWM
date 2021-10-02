@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="File">
+	
+	<!-- 파일 불러오기  -->
+	<select id="selectFileInfo" parameterType="int" resultType="com.ez.swm.meeting.vo.MeetingBoardFile">
+		<![CDATA[
+			SELECT
+				STORED_FILE_NAME,
+				ORIGINAL_FILE_NAME
+			FROM
+				MEETING_BOARD_FILE
+			WHERE
+				IDX=#{idx}		
+		]]>	
+	</select>
+	
+	<!-- 파일 등록 -->
+	<insert id="insertFile" parameterType="hashmap">
+         <![CDATA[
+            INSERT INTO MEETING_BOARD_FILE
+               (IDX,MEETING_BOARD_NO,ORIGINAL_FILE_NAME,STORED_FILE_NAME,FILE_SIZE)
+            VALUES
+               (SEQ_MEETING_FILE_IDX.NEXTVAL,#{MEETING_BOARD_NO},#{ORIGINAL_FILE_NAME}, #{STORED_FILE_NAME}, #{FILE_SIZE})      
+         ]]>
+      </insert>
+	
+	<!-- 파일 수정 -->
+	 <update id="modifyFile" parameterType="hashmap">
+	 	UPDATE MEETING_BOARD_FILE 
+	 	INTO ORIGINAL_FILE_NAME = #{original_file_name}, STORED_FILE_NAME = #{stored_file_name},
+	 		 FILE_SIZE = #{file_size}
+	 	WHERE MEETING_BOARD_NO = #{meeting_board_no}
+	 </update>
+	 <!-- 파일 있는지 체크하기 -->
+	 <select id="fileCheck" parameterType="int" resultType="int">
+	 	 SELECT COUNT(*) 
+	 	 FROM MEETING_BOARD_FILE 
+	 	 WHERE IDX = #{idx}
+	 </select>
+	 
+	 <!-- 파일 수정 시 기존 파일 삭제 -->
+	 <delete id="deleteFile">
+		DELETE FROM MEETING_BOARD_FILE
+		WHERE IDX = #{idx}	 
+	 </delete>
+	
+	<!-- 스터디 카페 이미지 등록 -->
+	<insert id="studycafeFileInsert" parameterType="hashmap">
+	         <![CDATA[
+            INSERT INTO STUDYCAFE_FILE
+               (IDX,STUDYCAFE_NO,ORIGINAL_FILE_NAME,STORED_FILE_NAME,FILE_SIZE, ROOM_NAME)
+            VALUES
+               (STUDYCAFE_FILE_SEQ.NEXTVAL,#{STUDYCAFE_NO},#{ORIGINAL_FILE_NAME}, #{STORED_FILE_NAME}, #{FILE_SIZE},#{ROOM_NAME})      
+         ]]>
+	</insert>
+	
+	<!-- 스터디카페 상세보기에 쓸 파일들 가져오기 -->
+	<select id="studycafeDetailFile" resultType="com.ez.swm.studycafe.vo.StudycafeDetailFile">
+		SELECT STUDYCAFE_NO,ORIGINAL_FILE_NAME, STORED_FILE_NAME, ROOM_NAME 
+		FROM STUDYCAFE_FILE
+		WHERE STUDYCAFE_NO = #{studycafe_no}	
+		ORDER BY IDX ASC
+	</select> 
+	<!-- 자유게시판  파일 등록 -->
+	<insert id="freeBoardInsertFile" parameterType="hashmap">
+	         <![CDATA[
+            INSERT INTO FREE_BOARD_FILE
+               (IDX,FREE_NO,ORIGINAL_FILE_NAME,STORED_FILE_NAME,FILE_SIZE)
+            VALUES
+               (FREE_BOARD_FILE_SEQ.NEXTVAL,#{FREE_NO},#{ORIGINAL_FILE_NAME}, #{STORED_FILE_NAME}, #{FILE_SIZE})      
+         ]]>
+	</insert>
+	
+	<!-- 자유게시판 파일 하나 들고오기 -->
+	<select id="freeBoardGetFile" parameterType="int" resultType="com.ez.swm.freeBoard.vo.FreeBoardFile">
+		SELECT FREE_NO , STORED_FILE_NAME
+		FROM FREE_BOARD_FILE
+		WHERE FREE_NO = #{free_no}
+	</select>
+</mapper>

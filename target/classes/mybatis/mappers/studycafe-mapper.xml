@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	 namespace="Studycafe">
+
+	<!-- 스터디 카페 등록하기 -->
+	<insert id="studycafeWrite" parameterType="com.ez.swm.admin.vo.StudycafeWrite">
+	INSERT INTO STUDYCAFE VALUES(
+		SEQ_STUDYCAFE.NEXTVAL , #{studycafe_name}, #{studycafe_address} ,#{studycafe_phone},
+		#{studycafe_open} ,#{studycafe_end} ,#{studycafe_content}
+	)
+	</insert>
+	<!-- 파일 업로드 시 스카 번호 불러오기 -->
+	<select id="getStudycafe_no" resultType="int" >
+		SELECT SEQ_STUDYCAFE.CURRVAL FROM DUAL	
+	</select>
+	<!-- 인기스터디카페 리스트 불러오기 (예약순)-->
+	<select id="BestStudycafeList" resultType="com.ez.swm.studycafe.vo.Studycafe">
+ 		<![CDATA[						         
+			select * from(         
+				select  b.studycafe_name, b.studycafe_no, b.studycafe_open, b.studycafe_end 
+				from (select studycafe_no, count(studycafe_no)as cnt from studycafe_book group by(studycafe_no) )a, studycafe b
+				where a.studycafe_no = b.studycafe_no order by a.cnt desc )
+			where rownum < 5
+ 		]]>
+	</select>
+	<!-- 신규 스터디카페 지점 리스트 불러오기 -->
+		<select id="NewStudycafeList" resultType="com.ez.swm.studycafe.vo.Studycafe">
+		<![CDATA[
+		SELECT * FROM (SELECT STUDYCAFE_NO, STUDYCAFE_NAME, STUDYCAFE_ADDRESS,
+						STUDYCAFE_PHONE,STUDYCAFE_OPEN,STUDYCAFE_END,STUDYCAFE_CONTENT
+						FROM STUDYCAFE
+						ORDER BY STUDYCAFE_NO DESC)
+        WHERE ROWNUM <=4
+		]]>
+	</select>
+	
+	<!-- 키워드 값 받아서 카페 리스트 뿌려주기 -->
+	<select id="studycafeSearch" resultType="com.ez.swm.studycafe.vo.Studycafe" parameterType="String">
+		SELECT STUDYCAFE_NO, STUDYCAFE_NAME, STUDYCAFE_ADDRESS,STUDYCAFE_PHONE,STUDYCAFE_OPEN,STUDYCAFE_END,STUDYCAFE_CONTENT
+		FROM STUDYCAFE
+		WHERE STUDYCAFE_ADDRESS LIKE #{keyword}||'%'
+	</select>
+	
+	<select id="getStudycafeOne" resultType="com.ez.swm.studycafe.vo.Studycafe">
+		SELECT * FROM STUDYCAFE
+		WHERE STUDYCAFE_NO = #{studycafe_no}
+	</select>
+	<!--  예약되어있는 시간 가져오기  -->
+	<select id="getBookTime" parameterType="com.ez.swm.book.vo.BookTime"  resultType="String">
+		<![CDATA[	
+			 select book_time 
+			 from studycafe_book_time
+			 where studycafe_no=#{studycafe_no} and studycafe_room=#{studycafe_room} and book_date=TO_DATE(#{book_date}, 'YYYY-MM-DD')
+		]]>
+	</select>
+	
+	
+	<!-- 리뷰쓰기 -->
+	<insert id="insertReview" parameterType="com.ez.swm.studycafe.vo.StudycafeReview"  >
+		<![CDATA[	
+			 insert into studycafe_review 
+			 values(SEQ_studycafe_review_no.nextval,#{studycafe_no},#{review_content},#{review_grade},#{userno},sysdate)
+		]]>
+	</insert>
+	
+	
+	
+	<!--리뷰가져오기  -->
+		<select id="getReviewList" parameterType="int"  resultType="com.ez.swm.studycafe.vo.StudycafeReview">
+		<![CDATA[	
+			select r.*,m.nickname from studycafe_review r, member m where r.userno=m.userno and r.studycafe_no=#{studycafe_no} order by review_no desc
+		
+		]]>
+	</select>
+	
+	<!-- 평점 계산용 -->
+	<select id="getReviewGrade" parameterType="int"  resultType="hashmap">
+		<![CDATA[	
+		select * from(select sum(r.review_grade)total from studycafe_review r, member m where r.userno=m.userno and r.studycafe_no=#{studycafe_no}),
+				(select count(*)count from studycafe_review r, member m where r.userno=m.userno and r.studycafe_no=#{studycafe_no}) 
+		]]>
+	</select>
+	
+	<!-- 리뷰삭제 -->
+	<delete id="reviewDelete" parameterType="int">
+		DELETE  STUDYCAFE_REVIEW WHERE REVIEW_NO = #{review_no}
+	</delete>
+	
+</mapper>

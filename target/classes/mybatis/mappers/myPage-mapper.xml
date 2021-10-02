@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="myPage">
+
+	<!-- 회원 정보 수정 (사용자) -->
+	<update id="updateMemberByUser" parameterType="com.ez.swm.login.vo.Member">
+		update member
+		set password = #{password}, nickName = #{nickName}, phone2 = #{phone2}, phone3 = #{phone3}, email = #{email}
+		where userNo = #{userNo}
+	</update>
+	
+	<!-- 회원 탈퇴 -->
+	<update id="deleteMember" parameterType="com.ez.swm.login.vo.Member">
+		update member
+		set status = 'Y'
+		where userId = #{userId} and password = #{password}
+	</update>
+	
+	<!-- 1:1 문의 작성 -->
+	<insert id="insertAsk" parameterType="com.ez.swm.myPage.vo.Ask">
+		insert into ask(ask_no, userNo, ask_title, ask_content)
+		values(seq_ask.nextval, #{userNo}, #{ask_title}, #{ask_content})
+	</insert>
+	
+	<!-- 사용자 번호에 따른 1:1 문의 확인 -->
+	<select id="getAskByUserNo" parameterType="int" resultType="com.ez.swm.myPage.vo.AskJoin">
+		select a.ask_no, a.ask_title, a.ask_content, a.ask_date, m.userNo, m.nickName
+		from ask a, member m
+		where m.userNo = #{userNo} and a.userNo = m.userNo
+		order by a.ask_no DESC
+	</select>
+	
+	<!-- 1:1문의 상세보기  detail로 영역에 저장 -->
+	<select id="askDetail" parameterType="int" resultType="com.ez.swm.myPage.vo.Ask">
+		select *
+		from ask
+		where ask_no = #{ask_no}
+	</select>
+	
+	<!-- 스터디카페 예약 정보 가져오기 -->
+	<select id="getBookInfoList" parameterType="int" resultType="com.ez.swm.book.vo.UserBookVo">
+		select b.book_no, m.userName, b.studycafe_name, b.booker_no, b.studycafe_room, b.permit_limit, b.book_date, b.start_time, b.end_time, b.pay, b.status
+		from member m, studycafe_book b
+		where m.userNo=b.booker_no and b.booker_no = #{userNo}
+		 order by b.book_no desc
+	</select>
+	
+	<!-- 결제완료 -->
+	<insert id="payStatus" parameterType="hashmap"  >
+	
+		<![CDATA[
+			update  studycafe_book set status=#{status} where book_no = #{book_no}		
+		]]>
+	
+	
+	</insert>
+	
+	
+	<!-- 내가 만든 스터디 -->
+	<select id="myCreateStudy" parameterType="int" resultType="com.ez.swm.meeting.vo.Meeting">
+		SELECT * 
+		FROM MEETING
+		WHERE MEETING_LEADER = #{userNo}
+	</select>
+	<!-- 내가 가입한 스터디 -->
+	<select id="myJoinStudy" parameterType="int" resultType="com.ez.swm.myPage.vo.MyJoinStudy">
+    SELECT ff.MEETING_NO,ff.MEETING_LEADER,ff.MEETING_AGE,ff.MEETING_TITLE,ff.MEETING_ADDRESS,ff.MEETING_SUBJECT,ff.MEETING_DATE
+    from member mm,  (select m.meeting_no, m.meeting_title, m.meeting_leader, m.meeting_age, m.meeting_address,m.meeting_subject,m.meeting_date 
+                            from meeting m, meeting_permit p 
+                            where m.meeting_no = p.meeting_no and p.userno=#{userNo} and p.permit='Y') ff
+    where mm.userno=ff.meeting_leader
+ 
+	</select>
+	
+	<!-- 내가 쓴 글(스터디 모임 내 게시판) -->
+	<select id="myStudyBoard" parameterType="int" resultType="com.ez.swm.myPage.vo.MyStudyBoard">
+		select b.meeting_board_no, b.meeting_no, b.meeting_board_writer, b.meeting_board_title, b.meeting_board_content, 
+			   b.meeting_board_date, m.meeting_title
+		from meeting m, meeting_board b
+		where meeting_board_writer = #{userNo} and m.meeting_no = b.meeting_no
+	</select>
+	
+	
+	
+</mapper>
