@@ -25,7 +25,7 @@ public class FileUtils {
 	
 	public List<Map<String, Object>> parseInsertFileInfo(MeetingBoard meetingBoard, MultipartHttpServletRequest request) throws Exception{
 		Iterator<String> iterator = request.getFileNames();
-		 String filePath ="C:\\Users\\kimbb\\git\\SWM\\SWM\\src\\main\\webapp\\resources\\files\\meeting\\";
+		 String filePath ="C:\\java\\sdsApp\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\SWM2\\resources\\files\\meeting\\";
 		MultipartFile multipartFile=null;
 		String originalFileName = null; 
 		String originalFileExtension = null;
@@ -67,7 +67,7 @@ public class FileUtils {
 	// 모임 내 게시글 수정
 public List<Map<String, Object>> parseUpdateFileInfo(MeetingBoardModify meetingBoardModify, MultipartHttpServletRequest request) throws Exception{
 		Iterator<String> iterator = request.getFileNames();
-		 String filePath ="C:\\Users\\kimbb\\git\\SWM\\SWM\\src\\main\\webapp\\resources\\files\\meeting\\";
+		 String filePath ="C:\\java\\sdsApp\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\SWM2\\resources\\files\\meeting\\";
 		MultipartFile multipartFile=null;
 		String originalFileName = null; 
 		String originalFileExtension = null;
@@ -109,7 +109,7 @@ public List<Map<String, Object>> parseUpdateFileInfo(MeetingBoardModify meetingB
 
 // 스터디 카페 등록
 public List<Map<String, Object>> parseInsertFileInfo(StudycafeWrite studycafeWrite, MultipartHttpServletRequest request) throws Exception{
-	 String filePath ="C:\\Users\\kimbb\\git\\SWM\\SWM\\src\\main\\webapp\\resources\\files\\studycafe\\";
+	 String filePath ="C:\\java\\sdsApp\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\SWM2\\resources\\files\\studycafe\\";
 	Iterator<String> iterator = request.getFileNames();
 
 	MultipartFile multipartFile=null;
@@ -157,7 +157,7 @@ public List<Map<String, Object>> parseInsertFileInfo(StudycafeWrite studycafeWri
 
 public List<Map<String, Object>> parseInsertFileInfo(FreeBoardWrite freeBoardWrite, MultipartHttpServletRequest request) throws Exception{
 	Iterator<String> iterator = request.getFileNames();
-	 String filePath ="C:\\Users\\kimbb\\git\\SWM\\SWM\\src\\main\\webapp\\resources\\files\\freeBoard\\";
+	 String filePath ="C:\\java\\sdsApp\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\SWM2\\resources\\files\\freeBoard\\";
 	MultipartFile multipartFile=null;
 	String originalFileName = null; 
 	String originalFileExtension = null;
