@@ -52,8 +52,8 @@
   - SQL의 Count() 함수를 이용하여, 비교할 데이터의 중복을 확인합니다. :pushpin: [코드 확인](https://github.com/saltNam/SWM/blob/db2bb6602ba1ca3d2befa296fb3182c0080e3935/src/main/resources/mybatis/mappers/member-mapper.xml#L27)
 
 - **이메일 인증** 
-  - JavaMailSender 클래스를 활용하며, Random 객체에 의해 생서된 6자리의 랜덤 숫자가 발송됩니다. :pushpin: [코드 확인] (https://github.com/saltNam/SWM/blob/db2bb6602ba1ca3d2befa296fb3182c0080e3935/src/main/java/com/ez/swm/login/controller/MemberController.java#L102)
-  - 발송 시 생성된 인증번호와 사용자가 입력한 데이터를 비교합니다. 결과에 따라 안내 문구와 색상이 변경됩니다. :pushpin: [코드 확인] (https://github.com/saltNam/SWM/blob/db2bb6602ba1ca3d2befa296fb3182c0080e3935/src/main/webapp/WEB-INF/views/login/joinForm.jsp#L105)
+  - JavaMailSender 클래스를 활용하며, Random 객체에 의해 생서된 6자리의 랜덤 숫자가 발송됩니다. :pushpin: [코드 확인](https://github.com/saltNam/SWM/blob/0e56d2ea9c4beb816738dbc6b687d2c148257aaa/src/main/java/com/ez/swm/login/controller/MemberController.java#L103)
+  - 발송 시 생성된 인증번호와 사용자가 입력한 데이터를 비교합니다. 결과에 따라 안내 문구와 색상이 변경됩니다. :pushpin: [코드 확인](https://github.com/saltNam/SWM/blob/0e56d2ea9c4beb816738dbc6b687d2c148257aaa/src/main/webapp/WEB-INF/views/login/joinForm.jsp#L105)
   
 ### 4.2 로그인
 <img src="https://user-images.githubusercontent.com/87680461/146746413-36c1dd7a-f6b5-485d-a7b1-e75379b7a35a.png"  width="500" height="500"/>  
